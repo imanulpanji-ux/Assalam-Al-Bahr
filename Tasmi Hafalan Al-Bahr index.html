@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1f5fae">
+
+    <title>Portal Tasmi' Al-Qur'an | RTQ Al Bahr</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --biru: #1f5fae;
+            --biru-tua: #143f78;
+            --biru-muda: #edf3fb;
+            --biru-hover: #dce8f7;
+            --emas: #b8923a;
+            --teks: #1b2433;
+            --abu: #5b6778;
+            --garis: #d6e2f2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { color-scheme: light; scroll-behavior: smooth; }
+
+        body {
+            font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif;
+            color: var(--teks);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #fbfdfa;
+            /* Pola bintang islami tipis sebagai latar */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%231f5fae' stroke-opacity='0.07' stroke-width='1'%3E%3Cpath d='M40 6l8.5 15.5L64 14l-7.5 16L72 40l-15.5 8.5L64 66l-16-7.5L40 74l-8.5-15.5L16 66l7.5-16L8 40l15.5-8.5L16 14l16 7.5z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .container { width: 90%; max-width: 1000px; margin: 0 auto; }
+
+        /* ---------- HEADER ---------- */
+        header {
+            text-align: center;
+            padding: 48px 0 8px;
+        }
+
+        .bismillah {
+            font-family: "Amiri", serif;
+            font-size: 28px;
+            color: var(--biru);
+            margin-bottom: 22px;
+        }
+
+        .logo-ring {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 0 0 4px #fff, 0 0 0 8px var(--biru-muda);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Logo memenuhi seluruh lingkaran.
+           Jika logo terpotong, ganti "cover" menjadi "contain". */
+        .logo-img { width: 100%; height: 100%; object-fit: cover; }
+
+        .logo-placeholder {
+            display: none;
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--biru);
+        }
+
+        header h1 {
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--biru-tua);
+            letter-spacing: 0.5px;
+        }
+
+        header p { color: var(--abu); font-size: 15px; margin-top: 2px; }
+
+        .pemisah {
+            width: 56px;
+            height: 3px;
+            border-radius: 3px;
+            background: var(--emas);
+            margin: 22px auto 0;
+        }
+
+        /* ---------- KONTEN ---------- */
+        main { flex: 1; padding: 34px 0 56px; }
+
+        .intro { text-align: center; margin-bottom: 28px; }
+        .intro h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+        .intro p { color: var(--abu); font-size: 15px; }
+
+        /* ---------- TOMBOL JUZ ---------- */
+        .juz-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .juz-button {
+            position: relative;
+            font: inherit;
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--biru);
+            background: var(--biru-muda);
+            border: 1px solid transparent;
+            border-radius: 16px;
+            padding: 18px 8px;
+            cursor: pointer;
+            transition: background .2s, color .2s, transform .2s, box-shadow .2s;
+        }
+
+        .juz-button:hover {
+            background: var(--biru-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(31, 95, 174, .12);
+        }
+
+        .juz-button.siap::after {
+            content: "";
+            position: absolute;
+            top: 9px;
+            right: 11px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--emas);
+        }
+
+        .juz-button.aktif {
+            background: var(--biru);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(31, 95, 174, .28);
+        }
+
+        .juz-button.aktif.siap::after { background: #f1d9a0; }
+
+        .juz-button:focus-visible,
+        .action-button:focus-visible {
+            outline: 3px solid #7fa8d8;
+            outline-offset: 3px;
+        }
+
+        .keterangan {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 18px;
+            font-size: 13px;
+            color: var(--abu);
+        }
+
+        .keterangan i {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--emas);
+            display: inline-block;
+        }
+
+        /* ---------- AREA PDF ---------- */
+        .pdf-section {
+            display: none;
+            margin-top: 30px;
+            padding: 22px;
+            background: #fff;
+            border: 1px solid var(--garis);
+            border-radius: 20px;
+            box-shadow: 0 14px 40px rgba(31, 95, 174, .08);
+        }
+
+        .pdf-section.active {
+            display: block;
+            animation: muncul .3s ease-out;
+        }
+
+        @keyframes muncul {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .pdf-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .pdf-heading h2 { font-size: 20px; font-weight: 700; color: var(--biru-tua); }
+
+        .pdf-box {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--garis);
+            background: var(--biru-muda);
+        }
+
+        .pdf-frame {
+            display: block;
+            width: 100%;
+            height: 680px;
+            border: 0;
+            background: transparent;
+        }
+
+        .pdf-loading {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            color: var(--abu);
+            font-size: 14px;
+            background: var(--biru-muda);
+        }
+
+        .pdf-loading.tampil { display: flex; }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--garis);
+            border-top-color: var(--biru);
+            border-radius: 50%;
+            animation: putar .8s linear infinite;
+        }
+
+        @keyframes putar { to { transform: rotate(360deg); } }
+
+        .pdf-kosong {
+            display: none;
+            padding: 70px 20px;
+            text-align: center;
+            color: var(--abu);
+        }
+
+        .pdf-kosong.tampil { display: block; }
+        .pdf-kosong strong { display: block; color: var(--teks); font-size: 17px; margin-bottom: 4px; }
+
+        .pdf-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .pdf-actions .kelompok { display: flex; flex-wrap: wrap; gap: 10px; }
+
+        .action-button {
+            display: inline-block;
+            font: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 18px;
+            border: 0;
+            border-radius: 11px;
+            background: var(--biru-muda);
+            color: var(--biru);
+            text-decoration: none;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .action-button:hover { background: var(--biru-hover); }
+        .action-button.utama { background: var(--biru); color: #fff; }
+        .action-button.utama:hover { background: var(--biru-tua); }
+        .action-button:disabled { opacity: .4; cursor: default; }
+
+        .message { margin-top: 12px; color: var(--abu); font-size: 13px; }
+
+        /* ---------- FOOTER ---------- */
+        footer {
+            border-top: 1px solid var(--garis);
+            background: #fff;
+            padding: 22px 0;
+            text-align: center;
+            color: var(--abu);
+            font-size: 13px;
+        }
+
+        /* ---------- RESPONSIF ---------- */
+        @media (max-width: 820px) {
+            .juz-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            header { padding-top: 34px; }
+            .bismillah { font-size: 24px; }
+            header h1 { font-size: 25px; }
+            .logo-ring { width: 112px; height: 112px; }
+            .intro h2 { font-size: 20px; }
+            .juz-grid { grid-template-columns: repeat(3, 1fr); gap: 9px; }
+            .juz-button { padding: 15px 4px; font-size: 14.5px; border-radius: 14px; }
+            .pdf-section { padding: 14px; border-radius: 16px; }
+            .pdf-frame { height: 500px; }
+            .pdf-heading h2 { font-size: 18px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER DAN LOGO -->
+    <header>
+        <div class="container">
+            <p class="bismillah" lang="ar" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+
+            <div class="logo-ring">
+                <img src="logo-al-bahr.png" alt="Logo RTQ Al Bahr" class="logo-img" id="logoYayasan">
+                <div class="logo-placeholder" id="logoPengganti">AL BAHR</div>
+            </div>
+
+            <h1>RTQ Al Bahr</h1>
+            <p>Portal Tasmi' Al-Qur'an</p>
+            <div class="pemisah"></div>
+        </div>
+    </header>
+
+    <!-- KONTEN UTAMA -->
+    <main>
+        <div class="container">
+
+            <section class="intro">
+                <h2>Daftar Soal Tasmi' Al-Qur'an</h2>
+                <p>Pilih juz untuk membuka kumpulan soal sambung ayat.</p>
+            </section>
+
+            <!-- TOMBOL JUZ 1 SAMPAI 30 (dibuat otomatis oleh script di bawah) -->
+            <section class="juz-grid" id="daftarJuz" aria-label="Pilih juz"></section>
+
+            <p class="keterangan"><i></i> Soal sudah tersedia</p>
+
+            <!-- AREA UNTUK MENAMPILKAN PDF -->
+            <section class="pdf-section" id="bagianPDF" aria-live="polite">
+
+                <div class="pdf-heading">
+                    <h2 id="judulPDF">Soal Tasmi' Juz 1</h2>
+                    <button class="action-button" onclick="tutupPDF()" type="button">Kembali ke Daftar Juz</button>
+                </div>
+
+                <div class="pdf-box" id="kotakPDF">
+                    <iframe
+                        id="penampilPDF"
+                        class="pdf-frame"
+                        title="Dokumen Soal Tasmi' Al-Qur'an"
+                        src="about:blank"
+                        allow="autoplay"
+                    ></iframe>
+
+                    <div class="pdf-loading" id="pemuat">
+                        <div class="spinner"></div>
+                        <span>Memuat soal...</span>
+                    </div>
+
+                    <div class="pdf-kosong" id="kosong">
+                        <strong>Soal belum tersedia</strong>
+                        <span id="pesanKosong"></span>
+                    </div>
+                </div>
+
+                <div class="pdf-actions">
+                    <div class="kelompok">
+                        <button class="action-button" id="tombolSebelumnya" onclick="pindahJuz(-1)" type="button">Juz Sebelumnya</button>
+                        <button class="action-button" id="tombolBerikutnya" onclick="pindahJuz(1)" type="button">Juz Berikutnya</button>
+                    </div>
+                    <a id="tombolBukaPDF" class="action-button utama" href="#" target="_blank" rel="noopener noreferrer">
+                        Buka PDF di Tab Baru
+                    </a>
+                </div>
+
+                <p class="message" id="pesanPDF">
+                    Jika PDF tidak muncul, gunakan tombol Buka PDF di Tab Baru.
+                </p>
+
+            </section>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 RTQ Al Bahr. Portal Tasmi' Al-Qur'an.</p>
+        </div>
+    </footer>
+
+    <script>
+        /*
+          MASUKKAN ID FILE GOOGLE DRIVE UNTUK SETIAP JUZ.
+
+          Contoh link Google Drive:
+          https://drive.google.com/file/d/1AbCdEfGh123456/view?usp=sharing
+
+          ID file adalah bagian:
+          1AbCdEfGh123456
+
+          Ganti teks ID_FILE_JUZ_2 dan seterusnya
+          dengan ID file PDF yang sebenarnya.
+        */
+
+        const idPDF = {
+            1:  "1hkoMbR3e30pBttnBQqBlqErKeW21Nmfw",
+            2:  "13AoCduIbqOAIAw12m_ecTwrGUknxO4CP",
+            3:  "1fZp1dktQzKg5wvf2PSV9tGftw0fx0VG0",
+            4:  "1jy8yh2ufsB_2gWxvQ2ZexwKxoa46KtI5",
+            5:  "1F6JIuwpgWATFFnuBz5rhhpDcd1qHXHhG",
+            6:  "ID_FILE_JUZ_6",
+            7:  "ID_FILE_JUZ_7",
+            8:  "ID_FILE_JUZ_8",
+            9:  "ID_FILE_JUZ_9",
+            10: "ID_FILE_JUZ_10",
+            11: "ID_FILE_JUZ_11",
+            12: "ID_FILE_JUZ_12",
+            13: "ID_FILE_JUZ_13",
+            14: "ID_FILE_JUZ_14",
+            15: "ID_FILE_JUZ_15",
+            16: "ID_FILE_JUZ_16",
+            17: "ID_FILE_JUZ_17",
+            18: "ID_FILE_JUZ_18",
+            19: "ID_FILE_JUZ_19",
+            20: "ID_FILE_JUZ_20",
+            21: "ID_FILE_JUZ_21",
+            22: "ID_FILE_JUZ_22",
+            23: "ID_FILE_JUZ_23",
+            24: "ID_FILE_JUZ_24",
+            25: "ID_FILE_JUZ_25",
+            26: "ID_FILE_JUZ_26",
+            27: "ID_FILE_JUZ_27",
+            28: "ID_FILE_JUZ_28",
+            29: "ID_FILE_JUZ_29",
+            30: "ID_FILE_JUZ_30"
+        };
+
+        /* ---------- Elemen halaman ---------- */
+        const daftarJuz = document.getElementById("daftarJuz");
+        const bagianPDF = document.getElementById("bagianPDF");
+        const penampilPDF = document.getElementById("penampilPDF");
+        const judulPDF = document.getElementById("judulPDF");
+        const tombolBukaPDF = document.getElementById("tombolBukaPDF");
+        const pesanPDF = document.getElementById("pesanPDF");
+        const pemuat = document.getElementById("pemuat");
+        const kosong = document.getElementById("kosong");
+        const pesanKosong = document.getElementById("pesanKosong");
+        const tombolSebelumnya = document.getElementById("tombolSebelumnya");
+        const tombolBerikutnya = document.getElementById("tombolBerikutnya");
+
+        let juzAktif = null;
+
+        function adaPDF(nomor) {
+            const id = idPDF[nomor];
+            return Boolean(id) && !id.startsWith("ID_FILE_");
+        }
+
+        /* ---------- Buat tombol Juz 01 - Juz 30 ---------- */
+        for (let i = 1; i <= 30; i++) {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "juz-button" + (adaPDF(i) ? " siap" : "");
+            b.textContent = "Juz " + String(i).padStart(2, "0");
+            b.dataset.juz = i;
+            b.addEventListener("click", function () { bukaJuz(i); });
+            daftarJuz.appendChild(b);
+        }
+
+        function tandaiTombolAktif() {
+            daftarJuz.querySelectorAll(".juz-button").forEach(function (b) {
+                b.classList.toggle("aktif", Number(b.dataset.juz) === juzAktif);
+            });
+        }
+
+        /* ---------- Buka soal sebuah juz ---------- */
+        function bukaJuz(nomorJuz) {
+            juzAktif = nomorJuz;
+            tandaiTombolAktif();
+
+            judulPDF.textContent = "Soal Tasmi' Juz " + nomorJuz;
+            tombolSebelumnya.disabled = nomorJuz <= 1;
+            tombolBerikutnya.disabled = nomorJuz >= 30;
+
+            if (!adaPDF(nomorJuz)) {
+                penampilPDF.src = "about:blank";
+                pemuat.classList.remove("tampil");
+                penampilPDF.style.display = "none";
+                kosong.classList.add("tampil");
+                pesanKosong.textContent = "Soal Juz " + nomorJuz + " akan segera ditambahkan.";
+                tombolBukaPDF.style.display = "none";
+                pesanPDF.textContent = "";
+            } else {
+                const id = encodeURIComponent(idPDF[nomorJuz]);
+
+                kosong.classList.remove("tampil");
+                penampilPDF.style.display = "block";
+                pemuat.classList.add("tampil");
+                penampilPDF.src = "https://drive.google.com/file/d/" + id + "/preview";
+
+                tombolBukaPDF.href = "https://drive.google.com/file/d/" + id + "/view";
+                tombolBukaPDF.style.display = "inline-block";
+                pesanPDF.textContent =
+                    "Jika PDF tidak muncul, pastikan akses Google Drive " +
+                    "diatur ke Siapa saja yang memiliki link.";
+            }
+
+            bagianPDF.classList.add("active");
+            bagianPDF.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+        penampilPDF.addEventListener("load", function () {
+            pemuat.classList.remove("tampil");
+        });
+
+        function pindahJuz(arah) {
+            const tujuan = (juzAktif || 1) + arah;
+            if (tujuan >= 1 && tujuan <= 30) bukaJuz(tujuan);
+        }
+
+        function tutupPDF() {
+            juzAktif = null;
+            tandaiTombolAktif();
+            bagianPDF.classList.remove("active");
+            penampilPDF.src = "about:blank";
+
+            daftarJuz.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+        /* Tombol Esc menutup soal */
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && bagianPDF.classList.contains("active")) tutupPDF();
+        });
+
+        /* ---------- Logo pengganti jika file logo tidak ditemukan ---------- */
+        const logoYayasan = document.getElementById("logoYayasan");
+        const logoPengganti = document.getElementById("logoPengganti");
+
+        logoYayasan.addEventListener("error", function () {
+            logoYayasan.style.display = "none";
+            logoPengganti.style.display = "block";
+        });
+
+        logoYayasan.addEventListener("load", function () {
+            logoYayasan.style.display = "block";
+            logoPengganti.style.display = "none";
+        });
+    </script>
+
+</body>
+</html>
